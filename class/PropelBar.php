@@ -79,31 +79,6 @@ class PropelBar implements IBarPanel, BasicLogger
 	 */
 	protected $libraryPaths;
 
-	/**
-	 * @var int
-	 */
-	private $queryCount = 0;
-
-	/**
-	 * @var int
-	 */
-	private $totalTime = 0;
-
-	/**
-	 * @var callable|null
-	 */
-	private $extractTime = null;
-
-	/**
-	 * @var string
-	 */
-	private $styles = '';
-
-	/**
-	 * @var string
-	 */
-	private $rows = '';
-
 
 	/**
 	 * Extract field from log row
@@ -179,7 +154,9 @@ class PropelBar implements IBarPanel, BasicLogger
 	 */
 	public function getTotalTime()
 	{
-		return 1000 * array_sum(array_map($this->extractTime, $this->messages));
+		return 1000 * array_sum(array_map(function ($row) {
+			return $this->extractTime($row);
+		}, $this->messages));
 	}
 
 	/**
@@ -213,7 +190,7 @@ HTML;
 	{
 		return '<span title="Propel">'
 		    . '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAPOgAADzoBlznbwgAAAnxJREFUOI2VkV1IU3EYxt/3eI6ec+a0bWxt0o4es5Z9EH4UURp5EwUVEUrRhyEW6E0RQRRBXnTVVV1WdGN0UZBGBIqKmqWibGlNsVJibeqO6dmOa7qPs49/FyGlbVTP5cvz/Hjf50X4TwWlFhMqfYeT4a8HKU704b8Go/NtJbGFF/XxgL2GRGZMyfgiaLbcbforQJVad6u+V1dUufskxGQEigZEBuj11c3ZW+/XpQWoC53lUW/zjbi/6wSJLwEwpmSGpnCCYowDGWx+D2e704KIiT8AUc+j7aqv7VY8OFoDBIN0blk3xRW0o3ZnB5931r3WjwAAhBCMzD8thNB0bWzRXoFUxmdat/8ly+UNovF4EACAzD4ohfBgNUSlSsjZdw+tTS2/AN8njcvzj3chlevjxfJ3iFXxn2AHA57WMxAar4fQWAXEFgAYiwqbnpVgTulE2uIIea8hcw8byPiBT2RYT8hQNiHDekJGbGES6D3yu5deFXT1ssBOXYSxhmsQGtsAFA/AinOQZXZAZl4faPZ0YW7VhxQdOBiYfX0O/M9vgjpTCGy+E7jN7cDv6IRIySCKVZF02yLx3D4E6sxpiMla4DZ2A7+tE03nJ1cMTufbMiXgPwqEFIsFpY2CIPhXn5BpiANnuY7GC96VoSzLOdPej6fkb55al8u5V1UjaDYXPLFarYGUb1yR2+3WKYq7TpKmLofDQQEAARFBpzP32GyVxywWy3JKgKIo61yukUZJ+nI1Elk2ZGVxSyyb7eB5bT/Pa/v1+qI3giCEU3Zgt7c3+HzSpUQioeV5bYfBYO5gGHqguLjCmyqwVnQymTQbjdZ6vb5oVBTFtG2n0w8h2wSOf5eJwQAAAABJRU5ErkJggg==">'
-		    . $this->queryCount . ($this->queryCount ? ' queries / ' . number_format($this->totalTime, 1, '.', ' ') . ' ms' : '')
+		    . $this->getQueryCount() . ($this->getQueryCount() ? ' queries / ' . number_format($this->getTotalTime(), 1, '.', ' ') . ' ms' : '')
 		    . '</span>';
 	}
 
@@ -224,8 +201,8 @@ HTML;
 	public function getPanel()
 	{
 		return <<<HTML
-$this->styles
-<h1>Queries: $this->queryCount, time: $this->totalTime ms</h1>
+{$this->getStyles()}
+<h1>Queries: {$this->getQueryCount()}, time: {$this->getTotalTime()} ms</h1>
 <div class="tracy-inner tracy-PropelBar">
 <table>
 <tr>
@@ -234,7 +211,7 @@ $this->styles
 	<th class="mem">Mem&nbsp;MB</th>
 	<th class="method">Method</th>
 </tr>
-$this->rows
+{$this->getRows()}
 </table>
 </div>
 HTML;
