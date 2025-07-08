@@ -1,9 +1,9 @@
 {
     "name": "zarganwar/propel-bar",
     "require": {
-        "tracy/tracy": "~2.5",
-        "nette/utils": "~2.5",
-        "nette/database": "~2.4"
+        "tracy/tracy": ">=2.5",
+        "nette/utils": ">=2.5",
+        "nette/database": ">=2.4"
     },
     "require-dev": {
         "propel/propel1": "~1.6"

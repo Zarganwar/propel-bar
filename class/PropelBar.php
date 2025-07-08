@@ -19,7 +19,7 @@ namespace TKR\Utils;
 use BasicLogger;
 use DebugPDO;
 use Nette\Database;
-use Nette\LegacyObject;
+use Nette\SmartObject;
 use Propel;
 use PropelConfiguration;
 use PropelPDO;
@@ -32,8 +32,11 @@ use Tracy\IBarPanel;
  *
  * @author Tomáš Kraut <tomas.kraut@matfyz.cz>
  */
-class PropelBar extends LegacyObject implements IBarPanel, BasicLogger
+class PropelBar implements IBarPanel, BasicLogger
 {
+
+	use SmartObject;
+
 
 	/**
 	 * Logged messages
