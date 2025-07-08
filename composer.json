@@ -1,5 +1,5 @@
 {
-    "name": "tkraut/propel-bar",
+    "name": "zarganwar/propel-bar",
     "require": {
         "tracy/tracy": "~2.5",
         "nette/utils": "~2.5",
@@ -12,6 +12,10 @@
         {
             "name": "Tomáš Kraut",
             "email": "tomas.kraut@matfyz.cz"
+        },
+        {
+            "name": "Martin Jirásek",
+            "email": "jertin@seznam.cz"
         }
     ],
     "license": "ISC",
