@@ -80,6 +80,22 @@ class PropelBar implements IBarPanel, BasicLogger
 	protected $libraryPaths;
 
 	/**
+	 * @var int
+	 */
+	private $queryCount = 0;
+
+	/**
+	 * @var int
+	 */
+	private $totalTime = 0;
+
+	/**
+	 * @var callable|null
+	 */
+	private $extractTime = null;
+
+
+	/**
 	 * Extract field from log row
 	 * @param array $row Row to extract
 	 * @param string $what Name of field to extraction
